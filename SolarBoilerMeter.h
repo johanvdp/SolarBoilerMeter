@@ -12,12 +12,27 @@
 #include "Wattmeter.h"
 #include "WiFiComponent.h"
 
-// The following secret is defined in a file external to the repository.
-// The secret file contains the following two lines:
-// const char* ssid = "station_name";
-// const char* password = "station_password";
-extern const char* ssid;
-extern const char* password;
+// The following secrets are defined in an file external to the repository.
+// The secret file contains the following lines:
+//
+// // ==============================
+// // DO NOT PLACE IN REPOSITORY
+// // ==============================
+// // WiFi access point credentials
+// // const char* wifiSSID = "??????";
+// // const char* wifiPassword = "??????";
+// // ------------------------------
+// // ThingSpeak channel credentials
+// const char* thingSpeakWriteAPIKey_Temperature = "??????";
+// const char* thingSpeakWriteAPIKey_Power = "??????";
+// // ==============================
+
+// WiFi access point credentials
+extern const char* wifiSSID;
+extern const char* wifiPassword;
+// ThingSpeak channel credentials
+extern const char* thingSpeakWriteAPIKey_Temperature;
+extern const char* thingSpeakWriteAPIKey_Power;
 
 class SolarBoilerMeter {
 
@@ -41,6 +56,7 @@ private:
 	Thermometer* thermometer;
 	Log* powersupplyAmpLog;
 	Log* powersupplyVoltLog;
+	Log* powersupplyWattLog;
 	Log* temperatureDegCLog;
 	PowerCollector* powerCollector;
 	TemperatureCollector* temperatureCollector;

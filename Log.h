@@ -12,17 +12,4 @@ public:
 	virtual void log(String value)= 0;
 };
 
-class DebugLog : public Log {
-
-public:
-	DebugLog(String source);
-	virtual ~DebugLog();
-
-	void setup();
-
-	virtual void log(String value);
-
-private:
-	String source;
-};
 #endif

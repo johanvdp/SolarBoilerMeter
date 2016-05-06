@@ -21,14 +21,13 @@ Thermometer::~Thermometer() {
 
 void Thermometer::setup() {
 	Debug::getInstance()->debug("Thermometer::setup");
-	startMeasurement();
 }
 
 void Thermometer::read() {
 	if (state == WAIT_FOR_RESULT) {
 		unsigned long now = clock->getTimestamp();
 		if (now > readyTimestamp) {
-			Debug::getInstance()->info("Thermometer::read conversion ready");
+			Debug::getInstance()->debug("Thermometer::read conversion ready");
 			uint8_t present = ds->reset();
 			if (present == 0) {
 				Debug::getInstance()->error(
@@ -58,16 +57,18 @@ void Thermometer::read() {
 			}
 			int16_t raw = (data[1] << 8) | data[0];
 			temperatureC = (float) raw / 16.0;
-			Debug::getInstance()->debug(
+			Debug::getInstance()->info(
 					"Thermometer::read temperature " + String(temperatureC, 2));
 			state = IDLE;
 		}
 	} else if (state == DISCONNECTED) {
 		// try connect
-		// Debug::getInstance()->debug("Thermometer::read try connect");
+		delay(2500);
+		Debug::getInstance()->debug("Thermometer::read try connect");
+		ds->reset();
 		if (!ds->search(addr)) {
 			// failed, prepare for next try
-			// Debug::getInstance()->debug("Thermometer::read still disconnected (no device found)");
+			Debug::getInstance()->debug("Thermometer::read still disconnected (no device found)");
 			ds->reset_search();
 			return;
 		} else {

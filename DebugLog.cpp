@@ -1,5 +1,5 @@
 // The author disclaims copyright to this source code.
-#include "Log.h"
+#include "DebugLog.h"
 #include "Debug.h"
 
 DebugLog::DebugLog(String name) : Log() {

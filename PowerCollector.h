@@ -16,7 +16,7 @@ public:
 	};
 
 	PowerCollector(Clock *clock, Wattmeter* meter, Log* currentLog,
-			Log* voltageLog);
+			Log* voltageLog, Log* powerLog, unsigned long measurementIntervalSeconds);
 	virtual ~PowerCollector();
 
 	void setup();
@@ -25,13 +25,13 @@ public:
 
 private:
 
-	static const int MEASUREMENT_PERIOD_MILLIS = 60000;
-
 	Clock* clock;
 	Wattmeter* meter;
 	Log* currentLog;
 	Log* voltageLog;
+	Log* powerLog;
 	State state;
+	unsigned long measurementIntervalMillis;
 	unsigned long nextMeasurementTimestamp;
 };
 

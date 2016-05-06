@@ -15,7 +15,7 @@ public:
 		WAITING, MEASURING, LOGGING
 	};
 
-	TemperatureCollector(Clock *clock, Thermometer* meter, Log* log);
+	TemperatureCollector(Clock *clock, Thermometer* meter, Log* log, unsigned long measurementIntervalSeconds);
 	virtual ~TemperatureCollector();
 
 	void setup();
@@ -23,13 +23,11 @@ public:
 	void write();
 
 private:
-
-	static const int MEASUREMENT_PERIOD_MILLIS = 60000;
-
 	Clock* clock;
 	Thermometer* meter;
 	Log* log;
 	State state;
+	unsigned long measurementIntervalMillis;
 	unsigned long nextMeasurementTimestamp;
 };
 

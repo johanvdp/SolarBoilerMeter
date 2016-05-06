@@ -7,6 +7,8 @@
 #include "Clock.h"
 #include "Debug.h"
 #include "Log.h"
+#include "DebugLog.h"
+#include "ThingSpeakLog.h"
 #include "PowerCollector.h"
 #include "TemperatureCollector.h"
 #include "Thermometer.h"
@@ -20,16 +22,17 @@ SolarBoilerMeter::SolarBoilerMeter() {
 
 	clock = new Clock();
 	debug = Debug::createInstance(clock);
-	wifi = new WiFiComponent(ssid, password);
+	wifi = new WiFiComponent(wifiSSID, wifiPassword);
 	wattmeter = new Wattmeter(clock);
 	thermometer = new Thermometer(clock);
 	powersupplyAmpLog = new DebugLog("powersupplyAmp");
 	powersupplyVoltLog = new DebugLog("powersupplyVolt");
-	temperatureDegCLog = new DebugLog("temperatureDegC");
+	powersupplyWattLog = new ThingSpeakLog("field1", thingSpeakWriteAPIKey_Power);
+	temperatureDegCLog = new ThingSpeakLog("field1", thingSpeakWriteAPIKey_Temperature);
 	powerCollector = new PowerCollector(clock, wattmeter, powersupplyAmpLog,
-			powersupplyVoltLog);
+			powersupplyVoltLog, powersupplyWattLog, 15);
 	temperatureCollector = new TemperatureCollector(clock, thermometer,
-			temperatureDegCLog);
+			temperatureDegCLog, 60);
 }
 
 SolarBoilerMeter::~SolarBoilerMeter() {

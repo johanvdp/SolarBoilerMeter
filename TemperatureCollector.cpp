@@ -3,13 +3,14 @@
 #include "Debug.h"
 #include "TemperatureCollector.h"
 
-TemperatureCollector::TemperatureCollector(Clock *clk, Thermometer* m, Log* l) {
+TemperatureCollector::TemperatureCollector(Clock *clk, Thermometer* m, Log* l, unsigned long measurementIntervalSeconds) {
 
 	clock = clk;
 	meter = m;
 	log = l;
 	state = WAITING;
 	nextMeasurementTimestamp = 0;
+	measurementIntervalMillis = measurementIntervalSeconds * 1000;
 }
 
 TemperatureCollector::~TemperatureCollector() {
@@ -26,7 +27,6 @@ void TemperatureCollector::read() {
 			Debug::getInstance()->debug("TemperatureCollector::read next measurement");
 			state = MEASURING;
 			meter->startMeasurement();
-			nextMeasurementTimestamp = now + MEASUREMENT_PERIOD_MILLIS;
 		}
 	} else if (state == MEASURING && meter->isReady()) {
 		Debug::getInstance()->debug("TemperatureCollector::read next measurement ready");
@@ -36,6 +36,8 @@ void TemperatureCollector::read() {
 
 void TemperatureCollector::write() {
 	if (state == LOGGING) {
+		unsigned long now = clock->getTimestamp();
+		nextMeasurementTimestamp = now + measurementIntervalMillis;
 		state = WAITING;
 		log->log(String(meter->getTemperatureC(), 2));
 	}

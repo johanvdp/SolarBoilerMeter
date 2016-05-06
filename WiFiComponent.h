@@ -4,7 +4,6 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
 
 #include "Component.h"
 
@@ -20,14 +19,13 @@ public:
 	void setup();
 	void process();
 
+	bool isReady();
+
+	static bool ready;
 private:
 
 	static void onEvent(WiFiEvent_t event);
-	void sendMainpage();
-	void sendGraph();
-	void sendNotFound();
 
-	ESP8266WebServer* server;
 	const char* ap_id;
 	const char* ap_password;
 	wl_status_t previousStatus = WL_IDLE_STATUS;
